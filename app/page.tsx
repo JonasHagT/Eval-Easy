@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import ChatPanel from '@/components/ChatPanel'
 import EvalPanel from '@/components/EvalPanel'
 import AgentConfigModal from '@/components/AgentConfigModal'
@@ -12,7 +12,10 @@ const DEFAULT_CONFIG: AgentConfig = {
   systemPrompt:
     'You are a professional email writing assistant. Help users craft clear, effective, and persuasive emails for any situation.',
   model: 'claude-sonnet-4-6',
+  annotationGuide: '',
 }
+
+const STORAGE_KEY = 'evalEasy_agentConfig'
 
 export default function Home() {
   const [config, setConfig] = useState<AgentConfig>(DEFAULT_CONFIG)
@@ -27,6 +30,22 @@ export default function Home() {
   } | null>(null)
   const [evalCount, setEvalCount] = useState(0)
   const turnIndexRef = useRef(0)
+
+  // Load config from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored)
+        setConfig({ ...DEFAULT_CONFIG, ...parsed })
+      } catch { /* ignore */ }
+    }
+  }, [])
+
+  // Persist config changes to localStorage
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(config))
+  }, [config])
 
   const sendMessage = async (content: string) => {
     const userMsg: Message = {
@@ -80,7 +99,7 @@ export default function Home() {
   }
 
   const handleSaveEval = async (
-    evalData: Omit<EvalEntry, 'id' | 'createdAt' | 'sessionId' | 'agentName' | 'systemPrompt'>
+    evalData: Omit<EvalEntry, 'id' | 'createdAt' | 'sessionId' | 'agentName' | 'systemPrompt' | 'runId' | 'runName'>
   ) => {
     await fetch('/api/evals', {
       method: 'POST',
@@ -109,8 +128,20 @@ export default function Home() {
             <span className="w-1.5 h-1.5 bg-green-400 rounded-full" />
             <span className="text-gray-400 font-medium">{config.name}</span>
             <span className="text-gray-700">·</span>
-            <span>{config.model}</span>
+            <span>{config.model.replace('claude-', '').replace('-20251001', '')}</span>
           </div>
+          <a
+            href="/test-suite"
+            className="text-xs text-gray-400 hover:text-white border border-gray-700 hover:border-gray-500 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            Test Bank
+          </a>
+          <a
+            href="/dashboard"
+            className="text-xs text-gray-400 hover:text-white border border-gray-700 hover:border-gray-500 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            Dashboard
+          </a>
           <button
             onClick={() => setShowConfig(true)}
             className="text-xs text-gray-400 hover:text-white border border-gray-700 hover:border-gray-500 px-3 py-1.5 rounded-lg transition-colors"
@@ -122,7 +153,7 @@ export default function Home() {
               href="/api/evals/export"
               className="text-xs text-indigo-400 hover:text-indigo-300 border border-indigo-800 hover:border-indigo-600 px-3 py-1.5 rounded-lg transition-colors"
             >
-              Export {evalCount} eval{evalCount !== 1 ? 's' : ''} CSV
+              Export CSV
             </a>
           )}
         </div>

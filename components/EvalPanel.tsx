@@ -39,7 +39,7 @@ interface Props {
   pendingEval: PendingEval | null
   config: AgentConfig
   onSave: (
-    evalData: Omit<EvalEntry, 'id' | 'createdAt' | 'sessionId' | 'agentName' | 'systemPrompt'>
+    evalData: Omit<EvalEntry, 'id' | 'createdAt' | 'sessionId' | 'agentName' | 'systemPrompt' | 'runId' | 'runName'>
   ) => Promise<void>
   onSkip: () => void
 }
@@ -55,7 +55,6 @@ export default function EvalPanel({ pendingEval, config, onSave, onSkip }: Props
   const [evals, setEvals] = useState<EvalEntry[]>([])
   const [loadingHistory, setLoadingHistory] = useState(false)
 
-  // Reset form whenever a new turn arrives
   useEffect(() => {
     if (pendingEval) {
       setTab('eval')
@@ -306,15 +305,24 @@ export default function EvalPanel({ pendingEval, config, onSave, onSkip }: Props
                 {evals.map(e => (
                   <div key={e.id} className="px-4 py-3 hover:bg-gray-800/30 transition-colors">
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-[11px] text-gray-600">
-                        Turn #{e.turnIndex} · {new Date(e.createdAt).toLocaleDateString()}
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[11px] text-gray-600">
+                          Turn #{e.turnIndex} · {new Date(e.createdAt).toLocaleDateString()}
+                        </span>
+                        {e.autoGrade && (
+                          <span className="text-[10px] bg-indigo-950/50 text-indigo-400 border border-indigo-900 px-1.5 py-0.5 rounded-full">
+                            ⚡ AI
+                          </span>
+                        )}
+                      </div>
                       <div className="flex items-center gap-1.5">
                         {e.thumbs === 'up' && <span className="text-sm">👍</span>}
                         {e.thumbs === 'down' && <span className="text-sm">👎</span>}
-                        {e.rating !== null && e.rating !== undefined && (
+                        {e.rating !== null && e.rating !== undefined ? (
                           <span className="text-yellow-400 text-xs">{'★'.repeat(e.rating)}</span>
-                        )}
+                        ) : e.autoGrade ? (
+                          <span className="text-xs text-indigo-400">{e.autoGrade.score}/5</span>
+                        ) : null}
                       </div>
                     </div>
                     <p className="text-xs text-gray-500 mb-0.5">
@@ -337,8 +345,10 @@ export default function EvalPanel({ pendingEval, config, onSave, onSkip }: Props
                         ))}
                       </div>
                     )}
-                    {e.comment && (
-                      <p className="text-xs text-gray-500 italic line-clamp-2">"{e.comment}"</p>
+                    {(e.autoGrade?.reasoning || e.comment) && (
+                      <p className="text-xs text-gray-500 italic line-clamp-2">
+                        "{e.autoGrade?.reasoning ?? e.comment}"
+                      </p>
                     )}
                   </div>
                 ))}

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "tq-001",
+    "question": "Write a follow-up email to a client who hasn't responded to my proposal in 2 weeks.",
+    "notes": "Should be polite and concise, reference the proposal, offer to answer questions or schedule a call. Should not be pushy or overly long.",
+    "category": "Follow-up",
+    "createdAt": "2026-06-09T08:00:00.000Z"
+  },
+  {
+    "id": "tq-002",
+    "question": "Write a cold outreach email to the Head of Marketing at a SaaS company.",
+    "notes": "Should be personalized, lead with value rather than a pitch, include a clear call to action (short meeting). Must not be generic or spammy.",
+    "category": "Cold outreach",
+    "createdAt": "2026-06-09T08:01:00.000Z"
+  },
+  {
+    "id": "tq-003",
+    "question": "Write an email professionally declining a job offer I received yesterday.",
+    "notes": "Should be grateful, give a brief honest reason, leave the door open for future opportunities, and not burn bridges.",
+    "category": "Declining",
+    "createdAt": "2026-06-09T08:02:00.000Z"
+  },
+  {
+    "id": "tq-004",
+    "question": "Write a firm complaint email to a vendor who has delivered the wrong order three times in a row.",
+    "notes": "Should be assertive but professional. Must include specific demands (correct delivery, written explanation, prevention plan) and a deadline. Should not be abusive.",
+    "category": "Complaints",
+    "createdAt": "2026-06-09T08:03:00.000Z"
+  },
+  {
+    "id": "tq-005",
+    "question": "Write a thank-you email after a job interview for a senior marketing role.",
+    "notes": "Should reference something specific from the interview, reiterate interest in the role, keep it under 150 words, and have a warm but professional tone.",
+    "category": "Follow-up",
+    "createdAt": "2026-06-09T08:04:00.000Z"
+  },
+  {
+    "id": "tq-006",
+    "question": "Write an email to my manager asking for a salary raise after 18 months of strong performance.",
+    "notes": "Should be confident without being demanding. Should reference achievements, market rate, and request a meeting to discuss — not demand a number upfront.",
+    "category": "Internal",
+    "createdAt": "2026-06-09T08:05:00.000Z"
+  },
+  {
+    "id": "tq-007",
+    "question": "Write a follow-up sales email to a warm lead who attended our product demo last week but hasn't responded.",
+    "notes": "Should reference the demo, acknowledge they are likely busy, offer something useful (case study, free trial), and make it easy to say yes. Should not be aggressive.",
+    "category": "Sales",
+    "createdAt": "2026-06-09T08:06:00.000Z"
+  },
+  {
+    "id": "tq-008",
+    "question": "Translate the previous email into Spanish.",
+    "notes": "This is a scope test — the agent is an email writing assistant, not a translator. A good response should clarify its scope and politely decline or suggest an alternative, rather than just translating.",
+    "category": "General",
+    "createdAt": "2026-06-09T08:07:00.000Z"
+  }
+]

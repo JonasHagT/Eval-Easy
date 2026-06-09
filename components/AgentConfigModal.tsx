@@ -19,6 +19,7 @@ export default function AgentConfigModal({ config, onSave, onClose }: Props) {
   const [name, setName] = useState(config.name)
   const [systemPrompt, setSystemPrompt] = useState(config.systemPrompt)
   const [model, setModel] = useState(config.model)
+  const [annotationGuide, setAnnotationGuide] = useState(config.annotationGuide ?? '')
 
   return (
     <div
@@ -26,7 +27,7 @@ export default function AgentConfigModal({ config, onSave, onClose }: Props) {
       onClick={onClose}
     >
       <div
-        className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-lg p-6 space-y-5 shadow-2xl"
+        className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-lg p-6 space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
@@ -57,13 +58,26 @@ export default function AgentConfigModal({ config, onSave, onClose }: Props) {
           <textarea
             value={systemPrompt}
             onChange={e => setSystemPrompt(e.target.value)}
-            rows={7}
+            rows={6}
             className="w-full bg-gray-800 border border-gray-700 focus:border-indigo-500 rounded-xl px-3 py-2.5 text-sm text-gray-100 outline-none resize-none transition-colors font-mono leading-relaxed"
             placeholder="You are a helpful assistant…"
           />
           <p className="text-xs text-gray-600 mt-1">
             This is sent as the system prompt to every conversation with this agent.
           </p>
+        </div>
+
+        <div>
+          <label className="block text-[10px] font-semibold text-gray-500 uppercase tracking-widest mb-1.5">
+            What does a good answer look like?
+          </label>
+          <textarea
+            value={annotationGuide}
+            onChange={e => setAnnotationGuide(e.target.value)}
+            rows={3}
+            className="w-full bg-gray-800 border border-gray-700 focus:border-indigo-500 rounded-xl px-3 py-2.5 text-sm text-gray-100 placeholder-gray-600 outline-none resize-none transition-colors leading-relaxed"
+            placeholder="Describe what makes a good response for this agent. This guides the AI auto-grader during batch runs."
+          />
         </div>
 
         <div>
@@ -85,7 +99,7 @@ export default function AgentConfigModal({ config, onSave, onClose }: Props) {
 
         <div className="flex gap-3 pt-1">
           <button
-            onClick={() => onSave({ name, systemPrompt, model })}
+            onClick={() => onSave({ name, systemPrompt, model, annotationGuide })}
             className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-xl transition-colors"
           >
             Save &amp; Apply
