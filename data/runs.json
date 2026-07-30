@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "id": "run-demo-batch-001",
+    "name": "v1 — Email baseline",
+    "description": "Demo batch for specialist review",
+    "systemPrompt": "You are a professional email writing assistant. Help users craft clear, effective, and persuasive emails for any situation.",
+    "model": "claude-sonnet-4-6",
+    "agentName": "Email Assistant",
+    "agentId": "agent-email-default",
+    "createdAt": "2026-06-09T09:00:00.000Z",
+    "mode": "batch"
+  }
+]

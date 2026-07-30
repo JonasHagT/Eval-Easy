@@ -5,7 +5,12 @@ const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 export async function POST(req: NextRequest) {
   try {
-    const { question, response: agentResponse, annotationGuide } = await req.json()
+    const {
+      question,
+      response: agentResponse,
+      annotationGuide,
+      passThreshold = 3,
+    } = await req.json()
 
     const userPrompt = `You are grading an AI agent response. Return ONLY valid JSON.
 
@@ -29,10 +34,11 @@ Return this exact JSON (no markdown, no explanation):
 
     const parsed = JSON.parse(jsonMatch[0])
     const score = Math.min(5, Math.max(1, Math.round(Number(parsed.score)))) as 1 | 2 | 3 | 4 | 5
+    const threshold = Number(passThreshold) || 3
 
     return NextResponse.json({
       score,
-      verdict: (score >= 3 ? 'pass' : 'fail') as 'pass' | 'fail',
+      verdict: (score >= threshold ? 'pass' : 'fail') as 'pass' | 'fail',
       reasoning: String(parsed.reasoning ?? ''),
     })
   } catch (err) {

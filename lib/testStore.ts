@@ -9,11 +9,13 @@ function ensure() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true })
 }
 
-export function readQuestions(): TestQuestion[] {
+export function readQuestions(agentId?: string): TestQuestion[] {
   ensure()
   if (!fs.existsSync(FILE)) return []
   try {
-    return JSON.parse(fs.readFileSync(FILE, 'utf-8'))
+    const qs = JSON.parse(fs.readFileSync(FILE, 'utf-8')) as TestQuestion[]
+    if (!agentId) return qs
+    return qs.filter(q => !q.agentId || q.agentId === agentId)
   } catch {
     return []
   }

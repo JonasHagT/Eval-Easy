@@ -28,6 +28,20 @@ export function saveEval(entry: EvalEntry): void {
   fs.writeFileSync(EVALS_FILE, JSON.stringify(evals, null, 2))
 }
 
+export function updateEval(id: string, patch: Partial<EvalEntry>): EvalEntry | null {
+  ensureDataDir()
+  const evals = readEvals()
+  const i = evals.findIndex(e => e.id === id)
+  if (i < 0) return null
+  evals[i] = { ...evals[i], ...patch, id: evals[i].id }
+  fs.writeFileSync(EVALS_FILE, JSON.stringify(evals, null, 2))
+  return evals[i]
+}
+
+export function getEvalsByRun(runId: string): EvalEntry[] {
+  return readEvals().filter(e => e.runId === runId)
+}
+
 export function clearEvals(): void {
   ensureDataDir()
   fs.writeFileSync(EVALS_FILE, JSON.stringify([], null, 2))
@@ -35,15 +49,32 @@ export function clearEvals(): void {
 
 export function evalsToCSV(evals: EvalEntry[]): string {
   const headers = [
-    'id', 'sessionId', 'turnIndex', 'userMessage', 'agentResponse',
-    'rating', 'thumbs', 'tags', 'comment', 'agentName', 'model', 'createdAt',
+    'id',
+    'sessionId',
+    'runId',
+    'runName',
+    'turnIndex',
+    'userMessage',
+    'agentResponse',
+    'rating',
+    'thumbs',
+    'tags',
+    'comment',
+    'agentName',
+    'model',
+    'reviewStatus',
+    'reviewedBy',
+    'autoGradeScore',
+    'autoGradeVerdict',
+    'createdAt',
   ]
-  const escape = (val: unknown) =>
-    `"${String(val ?? '').replace(/"/g, '""')}"`
+  const escape = (val: unknown) => `"${String(val ?? '').replace(/"/g, '""')}"`
   const rows = evals.map(e =>
     [
       escape(e.id),
       escape(e.sessionId),
+      escape(e.runId),
+      escape(e.runName),
       escape(e.turnIndex),
       escape(e.userMessage),
       escape(e.agentResponse),
@@ -53,6 +84,10 @@ export function evalsToCSV(evals: EvalEntry[]): string {
       escape(e.comment),
       escape(e.agentName),
       escape(e.model),
+      escape(e.reviewStatus),
+      escape(e.reviewedBy),
+      escape(e.autoGrade?.score),
+      escape(e.autoGrade?.verdict),
       escape(e.createdAt),
     ].join(',')
   )

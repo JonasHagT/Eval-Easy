@@ -1,0 +1,12 @@
+[
+  {
+    "id": "inv-demo-001",
+    "token": "demo-review-invite",
+    "runId": "run-demo-batch-001",
+    "agentId": "agent-email-default",
+    "label": "Review: Email baseline (demo)",
+    "suggestedName": "",
+    "createdAt": "2026-06-09T09:05:00.000Z",
+    "openCount": 0
+  }
+]

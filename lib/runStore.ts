@@ -13,10 +13,16 @@ export function readRuns(): Run[] {
   ensure()
   if (!fs.existsSync(FILE)) return []
   try {
-    return JSON.parse(fs.readFileSync(FILE, 'utf-8'))
+    const raw = fs.readFileSync(FILE, 'utf-8').trim()
+    if (!raw) return []
+    return JSON.parse(raw)
   } catch {
     return []
   }
+}
+
+export function getRun(id: string): Run | undefined {
+  return readRuns().find(r => r.id === id)
 }
 
 export function saveRun(run: Run): void {
