@@ -1,249 +1,169 @@
 # Eval Easy
 
-A split-screen interface for testing and evaluating Claude agents — built for domain experts, not developers.
-
-Chat with your agent on the left, rate each response on the right. Build a reusable test bank, run automated batch evals, and track improvement over time on the dashboard.
+A split-screen tool for testing AI agents — built so **you** (technical) set things up, and **domain specialists** score results via a simple invite link.
 
 ---
 
-## Why this exists
+## Who does what
 
-When non-technical domain specialists test AI agents, the feedback loop usually looks like:
-
-1. Chat with the agent
-2. Copy the question → paste into a spreadsheet
-3. Copy the response → paste into the spreadsheet
-4. Type feedback in the next column
-5. Repeat for every turn
-
-Eval Easy eliminates steps 2–4. After every agent response, a rating form appears automatically. One click to rate, a sentence to comment, save. The eval dataset builds itself as you test.
-
-When the evals are mature enough, switch to **Batch mode**: fire your full test bank at the agent automatically, get AI-graded results in minutes, then compare pass rates across model versions on the dashboard.
-
----
-
-## Features
-
-### Manual eval (Chat → Rate → Repeat)
-- **Split-screen layout** — chat on the left, eval form on the right
-- **Zero-friction capture** — form auto-populates after every agent turn
-- **Thumbs up / down** quick verdict
-- **1–5 star score** with hover preview
-- **Issue tags** — color-coded: `Wrong info`, `Off-topic` (blocking), `Too long`, `Tone off`, `Missing context` (quality), `Great answer`, `Helpful`
-- **Free-text notes** — "what should it have said?"
-
-### Test Bank (`/test-suite`)
-- Manage a reusable list of test questions
-- Add notes on what a good answer looks like — these guide the AI auto-grader
-- 8 categories: General, Follow-up, Cold outreach, Declining, Complaints, Onboarding, Sales, Internal
-- Pre-loaded with 8 demo questions for an email writing agent
-
-### Batch runs
-- Run all test questions against the agent automatically
-- **Pick a model per run** — compare Sonnet vs Haiku vs Opus on the same questions
-- **LLM-as-judge** auto-grading via Claude Haiku — score 1–5, pass/fail verdict, one-sentence reasoning
-- Real-time progress bar and live result stream
-- All results saved to the dashboard
-
-### Dashboard (`/dashboard`)
-- **Progress chart** — pass rate over time, color-coded by model
-- **Run comparison table** — hill-climbing view across named experiment runs
-- **Failure analysis** — bar chart of tag frequency, blocking tags highlighted
-- **All-evals table** — full history with AI grade and human notes side by side
-- **CSV export** — one click download
-
-### Agent config
-- Name, system prompt, and model stored in `localStorage` — persists across pages
-- **"What does a good answer look like?"** annotation guide per agent, used by the AI auto-grader
-- Switch model at any time — or pick a different model per batch run for comparison
+| You (technical) | Domain specialist |
+|---|---|
+| Connect agents (Claude or external API) | Open invite link |
+| Build test bank & score guides | Review emails one at a time |
+| Run tests / re-run | Score, tag, comment, override AI |
+| Invite reviewers | See overall pass rate for the run |
 
 ---
 
 ## Quick start
 
-### 1. Clone and install
-
 ```bash
 git clone https://github.com/JonasHagT/Eval-Easy.git
 cd Eval-Easy
-npm install
-```
-
-### 2. Add your Anthropic API key
-
-```bash
+npm install --legacy-peer-deps
 cp .env.example .env.local
-# Edit .env.local:
-# ANTHROPIC_API_KEY=sk-ant-...
-```
-
-Get a key at [console.anthropic.com](https://console.anthropic.com).
-
-### 3. Start the app
-
-```bash
+# Add ANTHROPIC_API_KEY=sk-ant-...
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
+**Try the demo review invite:** [http://localhost:3000/review/demo-review-invite](http://localhost:3000/review/demo-review-invite)
+
+---
+
+## Specialist review flow
+
+1. You run a batch from **Test Bank**
+2. Click **Invite reviewer** (also available from Dashboard → run → Invite)
+3. Copy the link and send it
+4. Specialist enters their name → scores one email at a time
+5. Scoring guide + AI grade sit next to the draft; they can agree or override
+6. Both of you open **Overall** for pass rate, issues, and full drafts
+
+Reviewers never see agent config, API keys, or model pickers.
+
+---
+
+## Features
+
+### Agents library
+- Multiple agents (e.g. Email Assistant + Sales follow-up)
+- Each has instructions, score guide, pass threshold
+- Claude models **or** external API URL (`POST { messages, instructions }` → `{ response }`)
+
+### Manual chat + score
+- Split screen: chat left, score right
+- Email-specific tags (weak subject, too salesy, missing CTA, placeholders left…)
+
+### Test bank + batch runs
+- Per-agent questions with “what good looks like”
+- Auto-grade with LLM-as-judge
+- Results marked `pending_review` until a specialist scores them
+
+### Invite + review queue
+- Magic link: `/review/[token]`
+- One-item queue with progress bar
+- Override AI grades (tracked as overrides)
+- Shared overall: `/review/[token]/overall`
+
+### Run overall + re-run
+- `/runs/[runId]` — invite, re-run all, retry failed only
+- Dashboard links into each run
+
 ---
 
 ## How to use
 
-### Step 1 — Configure your agent
+### 1. Configure agents
+Click **Agents** → add/edit. Set instructions and “what does a good answer look like?”
 
-Click **Configure Agent** in the top bar:
+### 2. Build the test bank
+**Test Bank** → add questions for the active agent.
 
-| Field | Description |
-|---|---|
-| **Agent name** | Display label |
-| **System prompt** | Instructions sent to Claude at the start of every conversation |
-| **What does a good answer look like?** | Description of good responses — used by the AI auto-grader during batch runs |
-| **Model** | Default model for chat |
+### 3. Run tests
+**Run tests** → name the run → pick model → start. When done: **Invite reviewer**.
 
-Config is saved to `localStorage` and shared across all pages.
+### 4. Specialist scores
+They open the link, enter their name, and work through the queue.
 
-### Step 2 — Build your test bank
-
-Go to **Test Bank** (`/test-suite`) to add reusable test questions:
-
-- Write the question the agent should answer
-- Add notes about what a good answer looks like (guides auto-grading)
-- Assign a category
-
-The app ships with 8 demo questions for an email writing agent.
-
-### Step 3 — Manual testing
-
-Chat with the agent on the main page. After each response, rate it in the right panel. You don't need to rate every turn — skip anything uninteresting.
-
-### Step 4 — Run a batch
-
-When your test bank is ready, click **▶ Run Batch** in the Test Bank page:
-
-1. Name the run (e.g. `v2 — more context in prompt`)
-2. Pick the model to test
-3. Click **Start Run**
-
-Every question is sent to the agent, auto-graded by Claude Haiku, and saved to the dashboard. Runs take 30–90 seconds depending on the number of questions.
-
-### Step 5 — Track progress on the dashboard
-
-Go to **Dashboard** (`/dashboard`) to see:
-- **Progress chart** — pass rate per run, line chart over time, color-coded by model
-- **Run comparison table** — sorted by date, best run highlighted
-- **Failure analysis** — which tags appear most, blocking failures flagged
+### 5. Improve and re-run
+From the run page or dashboard: **Re-run all** or **Retry failed**.
 
 ---
 
-## Workflow: hill climbing with model switching
+## Demo data
 
-```
-v1 — Baseline (Sonnet)       → 62% pass rate
-v2 — More context (Sonnet)   → 74% pass rate
-v3 — More context (Opus)     → 81% pass rate  ← new best
+| Resource | Value |
+|---|---|
+| Agents | Email Assistant, Sales follow-up |
+| Demo run | `v1 — Email baseline` |
+| Demo invite token | `demo-review-invite` |
+| Review URL | `/review/demo-review-invite` |
+| Run overall | `/runs/run-demo-batch-001` |
+
+---
+
+## External agent API
+
+When an agent’s connection is **External API**, Eval Easy POSTs:
+
+```json
+{
+  "messages": [{ "role": "user", "content": "…" }],
+  "instructions": "…",
+  "systemPrompt": "…",
+  "model": "…",
+  "agentName": "…"
+}
 ```
 
-Each batch run picks a model. The dashboard charts them all so you can see whether prompt changes or model upgrades are driving improvement.
+Expect:
 
----
+```json
+{ "response": "Subject: …\n\nBody…" }
+```
 
-## CSV format
-
-Each row in the exported CSV is one saved eval:
-
-| Column | Description |
-|---|---|
-| `id` | UUID for this eval entry |
-| `sessionId` | UUID shared across all turns in one session |
-| `runId` | Named run ID (if part of a batch run) |
-| `runName` | Named run display name |
-| `turnIndex` | Which turn in the conversation (1-based) |
-| `userMessage` | The exact question asked |
-| `agentResponse` | The exact response the agent gave |
-| `rating` | Star score (1–5) or empty |
-| `thumbs` | `up`, `down`, or empty |
-| `tags` | Comma-separated list of selected tags |
-| `comment` | Free-text notes |
-| `agentName` | Agent display name at time of eval |
-| `model` | Model ID used for this turn |
-| `createdAt` | ISO 8601 timestamp |
-
----
-
-## Models
-
-| Model ID | Label | Best for |
-|---|---|---|
-| `claude-sonnet-4-6` | Sonnet 4.6 | Default — best balance of quality and speed |
-| `claude-opus-4-8` | Opus 4.8 | Most capable, slower |
-| `claude-haiku-4-5-20251001` | Haiku 4.5 | Fastest, lowest cost — used for auto-grading |
+Also accepts `content`, `message`, `text`, or `output`.
 
 ---
 
 ## Project structure
 
 ```
-eval-easy/
-├── app/
-│   ├── layout.tsx
-│   ├── page.tsx                      # Main chat + eval page
-│   ├── dashboard/page.tsx            # Dashboard — metrics, chart, tables
-│   ├── test-suite/page.tsx           # Test Bank + batch run modal
-│   └── api/
-│       ├── chat/route.ts             # Proxies to Claude API
-│       ├── runs/route.ts             # Named run management
-│       ├── evals/
-│       │   ├── route.ts              # CRUD for eval entries
-│       │   ├── export/route.ts       # CSV download
-│       │   └── autograde/route.ts    # LLM-as-judge via Haiku
-│       └── test-suite/route.ts       # CRUD for test questions
-├── components/
-│   ├── ChatPanel.tsx
-│   ├── MessageBubble.tsx
-│   ├── EvalPanel.tsx                 # Rating form + history (⚡ AI badge for auto-graded)
-│   ├── AgentConfigModal.tsx          # Agent config including annotation guide
-│   └── ProgressChart.tsx            # SVG pass-rate chart
-├── lib/
-│   ├── types.ts                      # Shared TypeScript interfaces
-│   ├── evalStore.ts                  # File-based eval storage + CSV
-│   ├── runStore.ts                   # File-based run storage
-│   └── testStore.ts                  # File-based test question storage
-└── data/
-    ├── evals.json                    # All saved evals
-    ├── runs.json                     # Named runs
-    └── test-questions.json           # Test bank questions
+app/
+  page.tsx                 # Chat + score
+  dashboard/page.tsx       # Progress, invites, re-run
+  test-suite/page.tsx      # Test bank + batch
+  review/[token]/          # Specialist queue
+  review/[token]/overall/  # Shared overall
+  runs/[runId]/            # Run detail, invite, re-run
+  api/agents|invites|review|runs|chat|evals|test-suite/
+components/
+  AgentLibraryModal.tsx
+  InviteModal.tsx
+  ScoreForm.tsx
+  EvalPanel.tsx / ChatPanel.tsx / ProgressChart.tsx
+lib/
+  types.ts, agentStore.ts, inviteStore.ts, evalStore.ts,
+  runStore.ts, testStore.ts, agentRunner.ts
+data/
+  agents.json, invites.json, evals.json, runs.json, test-questions.json
 ```
 
 ---
 
-## Local storage
+## Storage
 
-All data is stored in `data/*.json` on the local filesystem. No database, no cloud account needed, data stays on your machine.
-
-For production deployments (Vercel, Fly.io, etc.) the filesystem is ephemeral. Swap the `*Store.ts` files for a database-backed implementation — the interfaces are the only thing API routes depend on.
+JSON files under `data/`. Fine for a shared hosted instance (Fly, Railway, a VM). For serverless (Vercel), swap the `*Store.ts` files for a database — API routes only depend on those interfaces.
 
 ---
 
-## Environment variables
+## Environment
 
 | Variable | Required | Description |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | Yes | Your Anthropic API key — only used server-side |
-
----
-
-## Tech stack
-
-| Layer | Choice |
-|---|---|
-| Framework | Next.js 15 (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS |
-| AI | Anthropic SDK (`@anthropic-ai/sdk`) |
-| Auto-grading | Claude Haiku 4.5 (LLM-as-judge) |
-| Storage | JSON files (`fs`) |
+| `ANTHROPIC_API_KEY` | Yes (for Claude agents + auto-grade) | Server-side only |
 
 ---
 

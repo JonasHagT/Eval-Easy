@@ -1,0 +1,26 @@
+[
+  {
+    "id": "agent-email-default",
+    "name": "Email Assistant",
+    "description": "Writes clear, professional emails for common business situations.",
+    "instructions": "You are a professional email writing assistant. Help users craft clear, effective, and persuasive emails for any situation.",
+    "model": "claude-sonnet-4-6",
+    "scoreGuide": "A good email is clear, appropriately toned, has a useful subject line, includes a concrete next step, and avoids fluff or leftover placeholders.",
+    "connection": "claude",
+    "passThreshold": 3,
+    "createdAt": "2026-06-09T08:00:00.000Z",
+    "updatedAt": "2026-06-09T08:00:00.000Z"
+  },
+  {
+    "id": "agent-sales-followup",
+    "name": "Sales follow-up",
+    "description": "Warm follow-ups after demos and proposals.",
+    "instructions": "You write concise sales follow-up emails. Reference the prior conversation, offer clear value, and make it easy to say yes to a short next step. Never be pushy or spammy.",
+    "model": "claude-sonnet-4-6",
+    "scoreGuide": "Pass if the email is short, references context, offers value (not just a bump), and has one clear CTA. Fail if generic, aggressive, or missing a next step.",
+    "connection": "claude",
+    "passThreshold": 3,
+    "createdAt": "2026-06-09T08:00:00.000Z",
+    "updatedAt": "2026-06-09T08:00:00.000Z"
+  }
+]
