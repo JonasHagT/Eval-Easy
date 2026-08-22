@@ -1,0 +1,67 @@
+{
+  "account": "Northwind Digital — Q3 Always-On",
+  "currency": "USD",
+  "asOfDate": "2026-08-15",
+  "campaigns": [
+    {
+      "id": "cmp-gads-brand",
+      "name": "Google Ads — Brand Search",
+      "channel": "Google Ads",
+      "objective": "Conversions",
+      "budget": 30000,
+      "spendToDate": 12000,
+      "flightStart": "2026-08-01",
+      "flightEnd": "2026-08-31"
+    },
+    {
+      "id": "cmp-meta-prospecting",
+      "name": "Meta — Prospecting",
+      "channel": "Meta",
+      "objective": "Traffic",
+      "budget": 45000,
+      "spendToDate": 28000,
+      "flightStart": "2026-08-01",
+      "flightEnd": "2026-08-31"
+    },
+    {
+      "id": "cmp-linkedin-abm",
+      "name": "LinkedIn — ABM",
+      "channel": "LinkedIn",
+      "objective": "Lead Gen",
+      "budget": 20000,
+      "spendToDate": 9600,
+      "flightStart": "2026-08-01",
+      "flightEnd": "2026-08-31"
+    },
+    {
+      "id": "cmp-tiktok-awareness",
+      "name": "TikTok — Awareness",
+      "channel": "TikTok",
+      "objective": "Reach",
+      "budget": 15000,
+      "spendToDate": 11200,
+      "flightStart": "2026-08-01",
+      "flightEnd": "2026-08-31"
+    },
+    {
+      "id": "cmp-display-retargeting",
+      "name": "Programmatic Display — Retargeting",
+      "channel": "Display",
+      "objective": "Conversions",
+      "budget": 12000,
+      "spendToDate": 3000,
+      "flightStart": "2026-08-01",
+      "flightEnd": "2026-08-31"
+    },
+    {
+      "id": "cmp-youtube-launch",
+      "name": "YouTube — Product Launch",
+      "channel": "YouTube",
+      "objective": "Video Views",
+      "budget": 18000,
+      "spendToDate": 5000,
+      "flightStart": "2026-08-10",
+      "flightEnd": "2026-09-09"
+    }
+  ]
+}
