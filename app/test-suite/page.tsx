@@ -5,14 +5,13 @@ import { TestQuestion, AgentConfig } from '@/lib/types'
 import { v4 as uuidv4 } from 'uuid'
 
 const CATEGORIES = [
-  'General',
-  'Follow-up',
-  'Cold outreach',
-  'Declining',
-  'Complaints',
-  'Onboarding',
-  'Sales',
-  'Internal',
+  'Account overview',
+  'Over-pacing',
+  'Under-pacing',
+  'Reallocation',
+  'Projection',
+  'Data lookup',
+  'Edge case',
 ]
 
 const MODELS = [
@@ -48,7 +47,7 @@ export default function TestSuitePage() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [formQuestion, setFormQuestion] = useState('')
   const [formNotes, setFormNotes] = useState('')
-  const [formCategory, setFormCategory] = useState('General')
+  const [formCategory, setFormCategory] = useState('Account overview')
   const [showAddForm, setShowAddForm] = useState(false)
 
   // Batch state
@@ -124,7 +123,7 @@ export default function TestSuitePage() {
     setShowAddForm(false)
     setFormQuestion('')
     setFormNotes('')
-    setFormCategory('General')
+    setFormCategory('Account overview')
   }
 
   const runBatch = async () => {

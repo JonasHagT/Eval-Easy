@@ -1,58 +1,58 @@
 [
   {
-    "id": "tq-001",
-    "question": "Write a follow-up email to a client who hasn't responded to my proposal in 2 weeks.",
-    "notes": "Should be polite and concise, reference the proposal, offer to answer questions or schedule a call. Should not be pushy or overly long.",
-    "category": "Follow-up",
-    "createdAt": "2026-06-09T08:00:00.000Z"
+    "id": "bp-001",
+    "question": "How is the account pacing overall? Are we on track to spend our budget by the end of the flight?",
+    "notes": "Should call get_account_summary, state the account pacing index (~1.10, i.e. marginally over pace) and that the account is close to on track overall but running slightly hot, then note projected end spend (~$157.7k) vs total budget ($140k). Should not invent numbers.",
+    "category": "Account overview",
+    "createdAt": "2026-08-15T09:00:00.000Z"
   },
   {
-    "id": "tq-002",
-    "question": "Write a cold outreach email to the Head of Marketing at a SaaS company.",
-    "notes": "Should be personalized, lead with value rather than a pitch, include a clear call to action (short meeting). Must not be generic or spammy.",
-    "category": "Cold outreach",
-    "createdAt": "2026-06-09T08:01:00.000Z"
+    "id": "bp-002",
+    "question": "Which campaigns are over-pacing and at risk of exhausting their budget early?",
+    "notes": "Should identify TikTok — Awareness and Meta — Prospecting (and YouTube — Product Launch) as over-pacing, with pacing index > 1.1, and quantify how much over ideal they are. Should recommend lowering daily budgets.",
+    "category": "Over-pacing",
+    "createdAt": "2026-08-15T09:01:00.000Z"
   },
   {
-    "id": "tq-003",
-    "question": "Write an email professionally declining a job offer I received yesterday.",
-    "notes": "Should be grateful, give a brief honest reason, leave the door open for future opportunities, and not burn bridges.",
-    "category": "Declining",
-    "createdAt": "2026-06-09T08:02:00.000Z"
+    "id": "bp-003",
+    "question": "Which campaigns are under-pacing, and how much daily budget should I add to each to land on budget?",
+    "notes": "Should identify Programmatic Display — Retargeting (heavily under) and Google Ads — Brand Search as under-pacing, and give each campaign's recommended daily budget for the remaining days of the flight.",
+    "category": "Under-pacing",
+    "createdAt": "2026-08-15T09:02:00.000Z"
   },
   {
-    "id": "tq-004",
-    "question": "Write a firm complaint email to a vendor who has delivered the wrong order three times in a row.",
-    "notes": "Should be assertive but professional. Must include specific demands (correct delivery, written explanation, prevention plan) and a deadline. Should not be abusive.",
-    "category": "Complaints",
-    "createdAt": "2026-06-09T08:03:00.000Z"
+    "id": "bp-004",
+    "question": "I need to keep total spend flat. Where should I move budget from and to?",
+    "notes": "Should propose reallocating from over-pacing campaigns (TikTok, Meta) to under-pacing ones (Display retargeting, Brand search) with rough dollar amounts, keeping total budget constant. Quantitative and specific.",
+    "category": "Reallocation",
+    "createdAt": "2026-08-15T09:03:00.000Z"
   },
   {
-    "id": "tq-005",
-    "question": "Write a thank-you email after a job interview for a senior marketing role.",
-    "notes": "Should reference something specific from the interview, reiterate interest in the role, keep it under 150 words, and have a warm but professional tone.",
-    "category": "Follow-up",
-    "createdAt": "2026-06-09T08:04:00.000Z"
+    "id": "bp-005",
+    "question": "If nothing changes, what will the TikTok Awareness campaign spend by the end of its flight?",
+    "notes": "Should call get_pacing for cmp-tiktok-awareness and report the projected end spend and the projected variance versus the $15,000 budget (it projects well over budget). Numbers must come from the tool.",
+    "category": "Projection",
+    "createdAt": "2026-08-15T09:04:00.000Z"
   },
   {
-    "id": "tq-006",
-    "question": "Write an email to my manager asking for a salary raise after 18 months of strong performance.",
-    "notes": "Should be confident without being demanding. Should reference achievements, market rate, and request a meeting to discuss — not demand a number upfront.",
-    "category": "Internal",
-    "createdAt": "2026-06-09T08:05:00.000Z"
+    "id": "bp-006",
+    "question": "What is the current spend-to-date and total budget for the Meta prospecting campaign?",
+    "notes": "Should look up cmp-meta-prospecting via the tools and report spend-to-date ($28,000) and budget ($45,000) accurately, with currency.",
+    "category": "Data lookup",
+    "createdAt": "2026-08-15T09:05:00.000Z"
   },
   {
-    "id": "tq-007",
-    "question": "Write a follow-up sales email to a warm lead who attended our product demo last week but hasn't responded.",
-    "notes": "Should reference the demo, acknowledge they are likely busy, offer something useful (case study, free trial), and make it easy to say yes. Should not be aggressive.",
-    "category": "Sales",
-    "createdAt": "2026-06-09T08:06:00.000Z"
+    "id": "bp-007",
+    "question": "The LinkedIn ABM campaign — is it pacing fine or does it need attention?",
+    "notes": "Should report that LinkedIn — ABM is on-track (pacing index near 1.0) and needs no urgent action, citing spend vs ideal. Should not overstate a problem that isn't there.",
+    "category": "Under-pacing",
+    "createdAt": "2026-08-15T09:06:00.000Z"
   },
   {
-    "id": "tq-008",
-    "question": "Translate the previous email into Spanish.",
-    "notes": "This is a scope test — the agent is an email writing assistant, not a translator. A good response should clarify its scope and politely decline or suggest an alternative, rather than just translating.",
-    "category": "General",
-    "createdAt": "2026-06-09T08:07:00.000Z"
+    "id": "bp-008",
+    "question": "How is the campaign 'cmp-nonexistent' pacing?",
+    "notes": "The campaign id does not exist. A good answer should say the campaign was not found (surfacing the tool error) rather than fabricating pacing numbers.",
+    "category": "Edge case",
+    "createdAt": "2026-08-15T09:07:00.000Z"
   }
 ]

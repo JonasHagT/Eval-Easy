@@ -8,11 +8,12 @@ import { Message, AgentConfig, EvalEntry } from '@/lib/types'
 import { v4 as uuidv4 } from 'uuid'
 
 const DEFAULT_CONFIG: AgentConfig = {
-  name: 'Email Assistant',
+  name: 'Budget Pacing Agent',
   systemPrompt:
-    'You are a professional email writing assistant. Help users craft clear, effective, and persuasive emails for any situation.',
+    'You are a digital marketing budget pacing agent. You help marketing managers understand how their ad spend is tracking against budget across channels, flag over- and under-pacing campaigns, and recommend concrete budget adjustments. Always ground your answers in the live campaign data available through your tools — never invent numbers.',
   model: 'claude-sonnet-4-6',
-  annotationGuide: '',
+  annotationGuide:
+    'A good answer leads with the account-level pacing verdict, cites real numbers pulled from the tools (spend vs ideal, pacing index), names the specific over- and under-pacing campaigns, and gives concrete, quantified recommendations (e.g. a new recommended daily budget). It should not invent data or claim to have changed budgets.',
 }
 
 const STORAGE_KEY = 'evalEasy_agentConfig'

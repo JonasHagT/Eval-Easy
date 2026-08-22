@@ -234,6 +234,39 @@ For production deployments (Vercel, Fly.io, etc.) the filesystem is ephemeral. S
 
 ---
 
+## Preloaded agent: Digital Marketing Budget Pacing
+
+This app ships configured as a **digital marketing budget pacing agent** — a Claude
+agent that tells a marketing manager how ad spend is tracking against budget and what
+to adjust. It is a worked example of the three pieces you'd wire into any real agent,
+then evaluate here:
+
+- **Built on Claude** — the chat route (`/api/chat`) runs an agentic tool-use loop via
+  `@anthropic-ai/sdk` (`lib/budgetAgent.ts`).
+- **An MCP** — a Model Context Protocol server (`mcp/budget-pacing-server.mjs`, stdio)
+  exposes read-only tools over the campaign account: `list_campaigns`, `get_pacing`,
+  and `get_account_summary`. The chat route connects to it as an MCP client, advertises
+  its tools to Claude, and executes any tool calls Claude makes. Sample account data
+  lives in `data/campaigns.json` (with a fixed `asOfDate` so pacing is reproducible).
+- **A skill** — `skills/budget-pacing/SKILL.md` is the agent's SOP (pacing definitions,
+  formulas, thresholds, response format). It is loaded into the system prompt on every
+  turn so the methodology is consistent.
+
+The **Test Bank** is preloaded with budget-pacing eval questions (account overview,
+over/under-pacing, reallocation, projections, data lookups, and an edge case), so you
+can run a **Batch** and grade the agent immediately.
+
+Pacing model: `ideal spend = budget × (elapsed days / flight days)`,
+`pacing index = actual ÷ ideal` (>1.10 over-pacing, <0.90 under-pacing), and a
+`recommended daily budget = remaining budget ÷ days remaining`.
+
+> Chat and batch runs call Claude, so they require a valid `ANTHROPIC_API_KEY` in
+> `.env.local`. The MCP server and pacing math run without a key —
+> `node mcp/test-client.mjs` exercises the tools directly, and
+> `npx tsx scripts/test-agent-loop.ts` runs the full agent loop with a stubbed model.
+
+---
+
 ## Tech stack
 
 | Layer | Choice |
@@ -242,6 +275,7 @@ For production deployments (Vercel, Fly.io, etc.) the filesystem is ephemeral. S
 | Language | TypeScript |
 | Styling | Tailwind CSS |
 | AI | Anthropic SDK (`@anthropic-ai/sdk`) |
+| Agent tools | Model Context Protocol (`@modelcontextprotocol/sdk`) |
 | Auto-grading | Claude Haiku 4.5 (LLM-as-judge) |
 | Storage | JSON files (`fs`) |
 
