@@ -6,6 +6,7 @@ import { AgentConfig } from '@/lib/types'
 const MODELS = [
   { id: 'claude-sonnet-4-6', label: 'Claude Sonnet 4.6 — recommended' },
   { id: 'claude-opus-4-8', label: 'Claude Opus 4.8 — most capable' },
+  { id: 'claude-opus-5', label: 'Claude Opus 5 — Console agent' },
   { id: 'claude-haiku-4-5-20251001', label: 'Claude Haiku 4.5 — fastest' },
 ]
 
@@ -40,6 +41,14 @@ export default function AgentConfigModal({ config, onSave, onClose }: Props) {
           </button>
         </div>
 
+        {config.source === 'claude-console' && (
+          <div className="rounded-xl border border-indigo-800/70 bg-indigo-950/30 px-3 py-2.5 text-xs text-indigo-200">
+            Using Claude Console deployment
+            {config.deploymentName ? `: ${config.deploymentName}` : ''}. Chat and batch
+            runs call this managed agent. The system prompt and model live in Console.
+          </div>
+        )}
+
         <div>
           <label className="block text-[10px] font-semibold text-gray-500 uppercase tracking-widest mb-1.5">
             Agent name
@@ -59,11 +68,14 @@ export default function AgentConfigModal({ config, onSave, onClose }: Props) {
             value={systemPrompt}
             onChange={e => setSystemPrompt(e.target.value)}
             rows={6}
+            readOnly={config.source === 'claude-console'}
             className="w-full bg-gray-800 border border-gray-700 focus:border-indigo-500 rounded-xl px-3 py-2.5 text-sm text-gray-100 outline-none resize-none transition-colors font-mono leading-relaxed"
             placeholder="You are a helpful assistant…"
           />
           <p className="text-xs text-gray-600 mt-1">
-            This is sent as the system prompt to every conversation with this agent.
+            {config.source === 'claude-console'
+              ? 'Loaded from the Claude Console agent. Edit it in Console if you need to change behavior.'
+              : 'This is sent as the system prompt to every conversation with this agent.'}
           </p>
         </div>
 
@@ -87,7 +99,8 @@ export default function AgentConfigModal({ config, onSave, onClose }: Props) {
           <select
             value={model}
             onChange={e => setModel(e.target.value)}
-            className="w-full bg-gray-800 border border-gray-700 focus:border-indigo-500 rounded-xl px-3 py-2.5 text-sm text-gray-100 outline-none transition-colors"
+            disabled={config.source === 'claude-console'}
+            className="w-full bg-gray-800 border border-gray-700 focus:border-indigo-500 rounded-xl px-3 py-2.5 text-sm text-gray-100 outline-none transition-colors disabled:opacity-70"
           >
             {MODELS.map(m => (
               <option key={m.id} value={m.id}>
@@ -99,7 +112,7 @@ export default function AgentConfigModal({ config, onSave, onClose }: Props) {
 
         <div className="flex gap-3 pt-1">
           <button
-            onClick={() => onSave({ name, systemPrompt, model, annotationGuide })}
+            onClick={() => onSave({ name, systemPrompt, model, annotationGuide, source: config.source, deploymentName: config.deploymentName })}
             className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-xl transition-colors"
           >
             Save &amp; Apply

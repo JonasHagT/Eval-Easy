@@ -18,6 +18,13 @@ export async function POST(req: NextRequest) {
     agentName: body.agentName ?? 'Agent',
     createdAt: new Date().toISOString(),
     mode: body.mode ?? 'manual',
+    evalSetId: body.evalSetId,
+    evalSetName: body.evalSetName,
+    agentSource: body.agentSource,
+    deploymentId: body.deploymentId,
+    deploymentName: body.deploymentName,
+    rowCount: body.rowCount,
+    sourceFile: body.sourceFile,
   }
   saveRun(run)
   return NextResponse.json(run, { status: 201 })

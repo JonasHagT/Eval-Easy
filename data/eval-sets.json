@@ -1,0 +1,232 @@
+[
+  {
+    "id": "evalset-nordic-knots-pl",
+    "name": "Nordic Knots P&L workbook",
+    "description": "10 questions that check the Nordic Knots weekly country P&L against AdHelp.io source data. Questions 1–5 are single figures; 6–10 are YoY / multi-step.",
+    "sourceFile": "NORDIC_KNOTS_EVAL_SET.pdf",
+    "sourceType": "pdf",
+    "columns": [
+      "#",
+      "Question",
+      "Answer",
+      "Category"
+    ],
+    "columnMap": {
+      "question": "Question",
+      "expected": "Answer",
+      "notes": null,
+      "category": "Category",
+      "id": "#"
+    },
+    "rows": [
+      {
+        "id": "1",
+        "question": "What did Sweden's Google Ads spend in week 17 of 2026?",
+        "expected": "53,015",
+        "notes": "Check the Summary/Detail tabs against AdHelp.io. Native export units; no explicit currency field.",
+        "category": "Foundational",
+        "raw": {
+          "#": "1",
+          "Question": "What did Sweden's Google Ads spend in week 17 of 2026?",
+          "Answer": "53,015",
+          "Category": "Foundational"
+        }
+      },
+      {
+        "id": "2",
+        "question": "What was total revenue (Order Intake Amount) across all markets in 2024 & 2025?",
+        "expected": "2024: 152,201,735\n2025: 260,575,778",
+        "notes": "Use the 8 named markets. Blank/unassigned market rows (~37,940 revenue) are excluded.",
+        "category": "Foundational",
+        "raw": {
+          "#": "2",
+          "Question": "What was total revenue (Order Intake Amount) across all markets in 2024 & 2025?",
+          "Answer": "2024: 152,201,735\n2025: 260,575,778",
+          "Category": "Foundational"
+        }
+      },
+      {
+        "id": "3",
+        "question": "What was the total ad spend across all markets in 2024 and 2025?",
+        "expected": "2024: 48,280,967\n2025: 89,421,364",
+        "notes": "",
+        "category": "Foundational",
+        "raw": {
+          "#": "3",
+          "Question": "What was the total ad spend across all markets in 2024 and 2025?",
+          "Answer": "2024: 48,280,967\n2025: 89,421,364",
+          "Category": "Foundational"
+        }
+      },
+      {
+        "id": "4",
+        "question": "What was Germany's revenue & cost in 2025?",
+        "expected": "Germany, 2025:\nRevenue: 15,273,237\nAd Spend (cost): 2,257,213",
+        "notes": "",
+        "category": "Foundational",
+        "raw": {
+          "#": "4",
+          "Question": "What was Germany's revenue & cost in 2025?",
+          "Answer": "Germany, 2025:\nRevenue: 15,273,237\nAd Spend (cost): 2,257,213",
+          "Category": "Foundational"
+        }
+      },
+      {
+        "id": "5",
+        "question": "How did the Google vs. Meta share of ad spend shift between 2024 and 2025?",
+        "expected": "Google: 27,277,397 → 41,714,153\nMeta: 15,346,735 → 41,430,039\nGoogle's share of ad spend fell from 56.5% (2024) to 46.6% (2025) — down 9.9 percentage points.\nMeta's share nearly doubled, from 31.8% (2024) to 46.3% (2025) — up 14.5 percentage points.",
+        "notes": "",
+        "category": "Foundational",
+        "raw": {
+          "#": "5",
+          "Question": "How did the Google vs. Meta share of ad spend shift between 2024 and 2025?",
+          "Answer": "Google: 27,277,397 → 41,714,153\nMeta: 15,346,735 → 41,430,039\nGoogle share 56.5% → 46.6% (−9.9pp). Meta share 31.8% → 46.3% (+14.5pp).",
+          "Category": "Foundational"
+        }
+      },
+      {
+        "id": "6",
+        "question": "Which market had the fastest full-year revenue growth from 2024 to 2025?",
+        "expected": "Switzerland: 5.3M → 12.7M, +140.5% YoY — fastest of all 8 markets.\nFormula: Growth % = (Revenue 2025 ÷ Revenue 2024 − 1) × 100, using full-year sums of Order Intake Amount.",
+        "notes": "Use full-year sums of Order Intake Amount for each market.",
+        "category": "Advanced",
+        "raw": {
+          "#": "6",
+          "Question": "Which market had the fastest full-year revenue growth from 2024 to 2025?",
+          "Answer": "Switzerland: 5.3M → 12.7M, +140.5% YoY — fastest of all 8 markets.",
+          "Category": "Advanced"
+        }
+      },
+      {
+        "id": "7",
+        "question": "How did COS% efficiency (Revenue ÷ Ad Spend) trend across 2024, 2025?",
+        "expected": "COS% is Ad Spend ÷ Revenue (not Revenue ÷ Ad Spend). COS% rose from 31.7% in 2024 to 34.3% in 2025 — a 2.6 percentage point increase.",
+        "notes": "The question wording says Revenue ÷ Ad Spend; the gold definition used here is Ad Spend ÷ Revenue.",
+        "category": "Advanced",
+        "raw": {
+          "#": "7",
+          "Question": "How did COS% efficiency (Revenue ÷ Ad Spend) trend across 2024, 2025?",
+          "Answer": "COS% (Ad Spend ÷ Revenue) rose from 31.7% in 2024 to 34.3% in 2025 — +2.6pp.",
+          "Category": "Advanced"
+        }
+      },
+      {
+        "id": "8",
+        "question": "How did Black Friday week (week 48) revenue compare YoY between 2024 and 2025?",
+        "expected": "+56.9% YoY — 18.5M (2024) vs 29.0M (2025), across all markets.",
+        "notes": "",
+        "category": "Advanced",
+        "raw": {
+          "#": "8",
+          "Question": "How did Black Friday week (week 48) revenue compare YoY between 2024 and 2025?",
+          "Answer": "+56.9% YoY — 18.5M (2024) vs 29.0M (2025), across all markets.",
+          "Category": "Advanced"
+        }
+      },
+      {
+        "id": "9",
+        "question": "What was Switzerland's net margin over the 2025 period, and by how much?",
+        "expected": "Switzerland, 2025 only:\nΣ Order Intake GP = 11,463,788\nΣ Ad Spend (Total) = 2,615,324\nNet Profit = 11,463,788 − 2,615,324 = 8,848,464\nΣ Order Intake Amount (revenue) = 12,744,552\nNet Margin % = 8,848,464 ÷ 12,744,552 = 69.4%\nNet Profit / net margin = Σ Order Intake GP − Σ Ad Spend (Total)\nNet Margin % = Net Profit ÷ Σ Order Intake Amount",
+        "notes": "2026 figures elsewhere in the workbook only go through week 21.",
+        "category": "Advanced",
+        "raw": {
+          "#": "9",
+          "Question": "What was Switzerland's net margin over the 2025 period, and by how much?",
+          "Answer": "Net Profit 8,848,464; Net Margin 69.4% for Switzerland 2025.",
+          "Category": "Advanced"
+        }
+      },
+      {
+        "id": "10",
+        "question": "How did 2026 Q1 vs 2025 Q1 perform?",
+        "expected": "Using calendar months (not week numbers 1–13):\nRevenue: 47,528,685 → 78,894,122 (+65.99%)\nAd Spend: 18,972,162 → 29,353,245 (+54.72%)\nGross Profit: 25,119,131 → 55,232,195 (+119.88%)\nNet Profit: 6,146,969 → 25,878,950\nNet Margin%: 12.93% → 32.80% (+19.87pp)",
+        "notes": "Q1 should be calendar months, not weeks 1–13. Some weeks span two months (e.g. week 13 is partly March, partly April).",
+        "category": "Advanced",
+        "raw": {
+          "#": "10",
+          "Question": "How did 2026 Q1 vs 2025 Q1 perform?",
+          "Answer": "Revenue +65.99%, Ad Spend +54.72%, GP +119.88%, Net Margin 12.93% → 32.80% (+19.87pp). Use calendar Q1, not weeks 1–13.",
+          "Category": "Advanced"
+        }
+      }
+    ],
+    "createdAt": "2026-08-26T14:00:00.000Z",
+    "updatedAt": "2026-08-26T14:00:00.000Z"
+  },
+  {
+    "id": "3df272bc-f1ee-4591-9eb2-61bf0e3dffc7",
+    "name": "nordic knots eval",
+    "description": "",
+    "sourceFile": "nordic_knots_eval.csv",
+    "sourceType": "csv",
+    "columns": [
+      "#",
+      "Question",
+      "Answer",
+      "Category"
+    ],
+    "columnMap": {
+      "question": "Question",
+      "expected": "Answer",
+      "notes": null,
+      "category": "Category",
+      "id": "#"
+    },
+    "rows": [
+      {
+        "id": "1",
+        "question": "What did Sweden's Google Ads spend in week 17 of 2026?",
+        "expected": "53015",
+        "notes": "",
+        "category": "Foundational",
+        "raw": {
+          "#": "1",
+          "Question": "What did Sweden's Google Ads spend in week 17 of 2026?",
+          "Answer": "53015",
+          "Category": "Foundational"
+        }
+      },
+      {
+        "id": "2",
+        "question": "What was total revenue across all markets in 2024 & 2025?",
+        "expected": "2024: 152201735; 2025: 260575778",
+        "notes": "",
+        "category": "Foundational",
+        "raw": {
+          "#": "2",
+          "Question": "What was total revenue across all markets in 2024 & 2025?",
+          "Answer": "2024: 152201735; 2025: 260575778",
+          "Category": "Foundational"
+        }
+      },
+      {
+        "id": "3",
+        "question": "What was the total ad spend across all markets in 2024 and 2025?",
+        "expected": "2024: 48280967; 2025: 89421364",
+        "notes": "",
+        "category": "Foundational",
+        "raw": {
+          "#": "3",
+          "Question": "What was the total ad spend across all markets in 2024 and 2025?",
+          "Answer": "2024: 48280967; 2025: 89421364",
+          "Category": "Foundational"
+        }
+      },
+      {
+        "id": "4",
+        "question": "What was Germany's revenue & cost in 2025?",
+        "expected": "Revenue 15273237; Ad spend 2257213",
+        "notes": "",
+        "category": "Foundational",
+        "raw": {
+          "#": "4",
+          "Question": "What was Germany's revenue & cost in 2025?",
+          "Answer": "Revenue 15273237; Ad spend 2257213",
+          "Category": "Foundational"
+        }
+      }
+    ],
+    "createdAt": "2026-08-26T15:00:18.120Z",
+    "updatedAt": "2026-08-26T15:00:18.120Z"
+  }
+]

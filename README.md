@@ -33,10 +33,10 @@ When the evals are mature enough, switch to **Batch mode**: fire your full test 
 - **Free-text notes** — "what should it have said?"
 
 ### Test Bank (`/test-suite`)
-- Manage a reusable list of test questions
-- Add notes on what a good answer looks like — these guide the AI auto-grader
-- 8 categories: General, Follow-up, Cold outreach, Declining, Complaints, Onboarding, Sales, Internal
-- Pre-loaded with 8 demo questions for an email writing agent
+- Upload eval sets as **CSV, Excel (xlsx/xls), Word (docx), PowerPoint (pptx), or PDF**
+- Columns are detected automatically (Question, Expected answer, Notes, Category)
+- Pick an agent and run every row; review and comment on each result
+- Run metadata (agent, model, Console deployment, eval set, timestamp) is stored for hill-climbing on the dashboard
 
 ### Batch runs
 - Run all test questions against the agent automatically
@@ -69,15 +69,16 @@ cd Eval-Easy
 npm install
 ```
 
-### 2. Add your Anthropic API key
+### 2. Add your Anthropic API key and Console agent
 
 ```bash
 cp .env.example .env.local
 # Edit .env.local:
 # ANTHROPIC_API_KEY=sk-ant-...
+# ANTHROPIC_DEPLOYMENT_ID=depl_...
 ```
 
-Get a key at [console.anthropic.com](https://console.anthropic.com).
+Get a key at [console.anthropic.com](https://console.anthropic.com). When `ANTHROPIC_DEPLOYMENT_ID` is set, Eval Easy chats with that Claude Console managed agent (sessions + events API) instead of the Messages API.
 
 ### 3. Start the app
 
@@ -231,6 +232,12 @@ For production deployments (Vercel, Fly.io, etc.) the filesystem is ephemeral. S
 | Variable | Required | Description |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | Yes | Your Anthropic API key — only used server-side |
+| `ANTHROPIC_DEPLOYMENT_ID` | Yes for Console agent | Claude Console managed-agent deployment ID. When set, chat and batch runs call this agent instead of the Messages API |
+| `ANTHROPIC_AGENT_ID` | Optional | Fallback agent ID if the deployment cannot be fetched |
+| `ANTHROPIC_ENVIRONMENT_ID` | Optional | Fallback environment ID |
+| `ANTHROPIC_VAULT_IDS` | Optional | Comma-separated vault IDs for Console agent credentials |
+
+Copy `.env.example` to `.env.local`. `.env.local` is gitignored and must never be committed.
 
 ---
 

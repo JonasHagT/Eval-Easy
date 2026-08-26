@@ -8,11 +8,14 @@ import { Message, AgentConfig, EvalEntry } from '@/lib/types'
 import { v4 as uuidv4 } from 'uuid'
 
 const DEFAULT_CONFIG: AgentConfig = {
-  name: 'Email Assistant',
+  name: 'Nordic Knots Marketing Finance Controller',
   systemPrompt:
-    'You are a professional email writing assistant. Help users craft clear, effective, and persuasive emails for any situation.',
-  model: 'claude-sonnet-4-6',
-  annotationGuide: '',
+    'You are a finance controller specialized in digital marketing for www.nordicknots.com. Your primary task is running daily budget pacing analysis.',
+  model: 'claude-opus-5',
+  annotationGuide:
+    'A good answer is a concise budget-pacing analysis: spend vs budget by channel, pacing %, projected over/under, named data sources, shown calculations, and explicit gaps if data is missing. Do not invent numbers.',
+  source: 'claude-console',
+  deploymentName: 'Nordic Knots',
 }
 
 const STORAGE_KEY = 'evalEasy_agentConfig'
@@ -29,17 +32,38 @@ export default function Home() {
     agentResponse: string
   } | null>(null)
   const [evalCount, setEvalCount] = useState(0)
+  const [consoleSessionId, setConsoleSessionId] = useState<string | null>(null)
   const turnIndexRef = useRef(0)
 
-  // Load config from localStorage on mount
+  // Load Console agent + any saved annotation notes
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored) {
+    const storedRaw = localStorage.getItem(STORAGE_KEY)
+    let stored: Partial<AgentConfig> = {}
+    if (storedRaw) {
       try {
-        const parsed = JSON.parse(stored)
-        setConfig({ ...DEFAULT_CONFIG, ...parsed })
+        stored = JSON.parse(storedRaw)
       } catch { /* ignore */ }
     }
+
+    fetch('/api/agent-config')
+      .then(r => r.json())
+      .then(remote => {
+        if (remote?.source === 'claude-console') {
+          setConfig({
+            name: stored.name || remote.name || DEFAULT_CONFIG.name,
+            systemPrompt: remote.systemPrompt ?? DEFAULT_CONFIG.systemPrompt,
+            model: remote.model ?? DEFAULT_CONFIG.model,
+            annotationGuide: stored.annotationGuide || DEFAULT_CONFIG.annotationGuide,
+            source: 'claude-console',
+            deploymentName: remote.deploymentName,
+          })
+          return
+        }
+        setConfig({ ...DEFAULT_CONFIG, ...stored, source: 'messages' })
+      })
+      .catch(() => {
+        setConfig({ ...DEFAULT_CONFIG, ...stored })
+      })
   }, [])
 
   // Persist config changes to localStorage
@@ -67,10 +91,12 @@ export default function Home() {
           messages: newMessages.map(m => ({ role: m.role, content: m.content })),
           systemPrompt: config.systemPrompt,
           model: config.model,
+          sessionId: consoleSessionId,
         }),
       })
       const data = await res.json()
       if (data.error) throw new Error(data.error)
+      if (typeof data.sessionId === 'string') setConsoleSessionId(data.sessionId)
 
       const assistantMsg: Message = {
         id: uuidv4(),
@@ -129,12 +155,20 @@ export default function Home() {
             <span className="text-gray-400 font-medium">{config.name}</span>
             <span className="text-gray-700">·</span>
             <span>{config.model.replace('claude-', '').replace('-20251001', '')}</span>
+            {config.source === 'claude-console' && (
+              <>
+                <span className="text-gray-700">·</span>
+                <span className="text-indigo-300">
+                  Console{config.deploymentName ? ` · ${config.deploymentName}` : ''}
+                </span>
+              </>
+            )}
           </div>
           <a
             href="/test-suite"
             className="text-xs text-gray-400 hover:text-white border border-gray-700 hover:border-gray-500 px-3 py-1.5 rounded-lg transition-colors"
           >
-            Test Bank
+            Eval Sets
           </a>
           <a
             href="/dashboard"
@@ -166,6 +200,7 @@ export default function Home() {
           isLoading={isLoading}
           onSend={sendMessage}
           hasPendingEval={pendingEval !== null}
+          longRunning={config.source === 'claude-console'}
         />
         <EvalPanel
           pendingEval={pendingEval}

@@ -14,12 +14,14 @@ interface Props {
 const MODEL_COLOR: Record<string, string> = {
   'claude-sonnet-4-6': '#6366f1',
   'claude-opus-4-8': '#a855f7',
+  'claude-opus-5': '#c084fc',
   'claude-haiku-4-5-20251001': '#22d3ee',
 }
 
 const MODEL_LABEL: Record<string, string> = {
   'claude-sonnet-4-6': 'Sonnet',
   'claude-opus-4-8': 'Opus',
+  'claude-opus-5': 'Opus 5',
   'claude-haiku-4-5-20251001': 'Haiku',
 }
 
