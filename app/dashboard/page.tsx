@@ -21,6 +21,7 @@ export default function DashboardPage() {
   const [evals, setEvals] = useState<EvalEntry[]>([])
   const [runs, setRuns] = useState<Run[]>([])
   const [loading, setLoading] = useState(true)
+  const [setFilter, setSetFilter] = useState('all')
 
   useEffect(() => {
     Promise.all([
@@ -86,6 +87,25 @@ export default function DashboardPage() {
 
   runStats.sort((a, b) => new Date(a.run.createdAt).getTime() - new Date(b.run.createdAt).getTime())
 
+  const evalSetNames = Array.from(new Set(runStats.map(rs => rs.run.evalSetName).filter(Boolean))) as string[]
+  const visibleStats = setFilter === 'all'
+    ? runStats
+    : runStats.filter(rs => rs.run.evalSetName === setFilter)
+
+  const deltaByRun = new Map<string, number | null>()
+  const bySet: Record<string, RunStats[]> = {}
+  for (const rs of visibleStats) {
+    const key = rs.run.evalSetId || rs.run.evalSetName || '__none__'
+    if (!bySet[key]) bySet[key] = []
+    bySet[key].push(rs)
+  }
+  for (const group of Object.values(bySet)) {
+    group.forEach((rs, i) => {
+      if (i === 0) deltaByRun.set(rs.run.id, null)
+      else deltaByRun.set(rs.run.id, rs.passRate - group[i - 1].passRate)
+    })
+  }
+
   // Overall stats (all evals)
   const withThumbs = evals.filter(e => e.thumbs !== null)
   const totalPass = withThumbs.filter(e => e.thumbs === 'up').length
@@ -104,14 +124,14 @@ export default function DashboardPage() {
   const sortedTags = Object.entries(allTagBreakdown).sort((a, b) => b[1] - a[1])
 
   // Chart data: runs sorted by date
-  const chartData: ChartDataPoint[] = runStats.map(rs => ({
+  const chartData: ChartDataPoint[] = visibleStats.map(rs => ({
     label: rs.run.name,
     passRate: rs.passRate,
     model: rs.run.model,
     mode: rs.mode,
   }))
 
-  const bestRun = [...runStats].sort((a, b) => b.passRate - a.passRate)[0]
+  const bestRun = [...visibleStats].sort((a, b) => b.passRate - a.passRate)[0]
 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100">
@@ -124,7 +144,7 @@ export default function DashboardPage() {
             </a>
             <span className="text-gray-700">|</span>
             <a href="/test-suite" className="text-gray-500 hover:text-gray-300 text-sm transition-colors">
-              Test Bank
+              Eval Sets
             </a>
             <span className="text-gray-700">|</span>
             <span className="text-base font-semibold text-white">Dashboard</span>
@@ -144,16 +164,35 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-sm font-semibold text-white">Pass Rate Progress</h2>
-              <p className="text-xs text-gray-500 mt-0.5">Pass rate per run, ordered by date</p>
+              <p className="text-xs text-gray-500 mt-0.5">Pass rate per run on the same eval set — hill climbing</p>
             </div>
             <a
               href="/test-suite"
               className="text-xs text-indigo-400 hover:text-indigo-300 border border-indigo-800 hover:border-indigo-600 px-3 py-1.5 rounded-lg transition-colors"
             >
-              ▶ Run batch
+              ▶ Run eval set
             </a>
           </div>
           <ProgressChart data={chartData} />
+          {evalSetNames.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-4">
+              <button
+                onClick={() => setSetFilter('all')}
+                className={`text-xs px-3 py-1.5 rounded-lg border ${setFilter === 'all' ? 'border-indigo-500 text-white' : 'border-gray-700 text-gray-500'}`}
+              >
+                All sets
+              </button>
+              {evalSetNames.map(name => (
+                <button
+                  key={name}
+                  onClick={() => setSetFilter(name)}
+                  className={`text-xs px-3 py-1.5 rounded-lg border ${setFilter === name ? 'border-indigo-500 text-white' : 'border-gray-700 text-gray-500'}`}
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
+          )}
           {/* Model legend */}
           <div className="flex gap-4 mt-3 justify-end">
             {[
@@ -195,7 +234,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Run comparison table */}
-        {runStats.length > 0 && (
+        {visibleStats.length > 0 && (
           <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-800 flex items-center justify-between">
               <h2 className="text-sm font-semibold text-white">Run Comparison</h2>
@@ -206,17 +245,21 @@ export default function DashboardPage() {
                 <thead>
                   <tr className="border-b border-gray-800 text-xs text-gray-500 uppercase tracking-wider">
                     <th className="text-left px-6 py-3">Run</th>
+                    <th className="text-left px-4 py-3">Eval set</th>
+                    <th className="text-left px-4 py-3">Agent</th>
                     <th className="text-left px-4 py-3">Model</th>
                     <th className="text-center px-4 py-3">Mode</th>
                     <th className="text-center px-4 py-3">Evals</th>
                     <th className="text-center px-4 py-3">Pass Rate</th>
+                    <th className="text-center px-4 py-3">Δ vs last</th>
                     <th className="text-center px-4 py-3">Avg Rating</th>
                     <th className="text-center px-4 py-3">Blocking</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {runStats.map(rs => {
+                  {visibleStats.map(rs => {
                     const isBest = bestRun?.run.id === rs.run.id
+                    const delta = deltaByRun.get(rs.run.id)
                     return (
                       <tr
                         key={rs.run.id}
@@ -236,8 +279,20 @@ export default function DashboardPage() {
                               {rs.run.description && (
                                 <p className="text-xs text-gray-600">{rs.run.description}</p>
                               )}
+                              <p className="text-[11px] text-gray-600 mt-0.5">
+                                {new Date(rs.run.createdAt).toLocaleString()}
+                              </p>
                             </div>
                           </div>
+                        </td>
+                        <td className="px-4 py-4 text-xs text-gray-400 max-w-[10rem]">
+                          {rs.run.evalSetName ?? '—'}
+                        </td>
+                        <td className="px-4 py-4 text-xs text-gray-300 max-w-[10rem]">
+                          {rs.run.agentName}
+                          {rs.run.deploymentName && (
+                            <p className="text-[11px] text-indigo-300">Console · {rs.run.deploymentName}</p>
+                          )}
                         </td>
                         <td className="px-4 py-4">
                           <span className="text-xs text-gray-400">
@@ -266,6 +321,15 @@ export default function DashboardPage() {
                           >
                             {rs.total > 0 ? `${Math.round(rs.passRate)}%` : '—'}
                           </span>
+                        </td>
+                        <td className="px-4 py-4 text-center">
+                          {delta === null || delta === undefined ? (
+                            <span className="text-gray-600">—</span>
+                          ) : (
+                            <span className={delta > 0 ? 'text-green-400' : delta < 0 ? 'text-red-400' : 'text-gray-500'}>
+                              {delta > 0 ? '+' : ''}{Math.round(delta)}pp
+                            </span>
+                          )}
                         </td>
                         <td className="px-4 py-4 text-center text-yellow-400">
                           {rs.avgRating > 0 ? rs.avgRating.toFixed(1) : '—'}

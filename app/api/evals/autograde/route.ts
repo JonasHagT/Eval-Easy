@@ -5,14 +5,17 @@ const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 export async function POST(req: NextRequest) {
   try {
-    const { question, response: agentResponse, annotationGuide } = await req.json()
+    const { question, response: agentResponse, annotationGuide, expectedAnswer } = await req.json()
 
     const userPrompt = `You are grading an AI agent response. Return ONLY valid JSON.
 
 Question: ${question}
 
 Response: ${agentResponse}
+${expectedAnswer ? `\nExpected answer / gold figures:\n${expectedAnswer}` : ''}
 ${annotationGuide ? `\nEvaluation criteria:\n${annotationGuide}` : ''}
+
+If an expected answer is provided, score based on whether the response matches those facts and numbers (small rounding differences are OK). Pass if the key figures and conclusion are correct.
 
 Return this exact JSON (no markdown, no explanation):
 {"score":1-5,"verdict":"pass or fail","reasoning":"one sentence"}`

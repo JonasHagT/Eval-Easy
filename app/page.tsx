@@ -168,7 +168,7 @@ export default function Home() {
             href="/test-suite"
             className="text-xs text-gray-400 hover:text-white border border-gray-700 hover:border-gray-500 px-3 py-1.5 rounded-lg transition-colors"
           >
-            Test Bank
+            Eval Sets
           </a>
           <a
             href="/dashboard"

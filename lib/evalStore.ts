@@ -28,6 +28,16 @@ export function saveEval(entry: EvalEntry): void {
   fs.writeFileSync(EVALS_FILE, JSON.stringify(evals, null, 2))
 }
 
+export function updateEval(id: string, patch: Partial<EvalEntry>): EvalEntry | null {
+  ensureDataDir()
+  const evals = readEvals()
+  const i = evals.findIndex(e => e.id === id)
+  if (i < 0) return null
+  evals[i] = { ...evals[i], ...patch, id: evals[i].id }
+  fs.writeFileSync(EVALS_FILE, JSON.stringify(evals, null, 2))
+  return evals[i]
+}
+
 export function clearEvals(): void {
   ensureDataDir()
   fs.writeFileSync(EVALS_FILE, JSON.stringify([], null, 2))
@@ -35,8 +45,9 @@ export function clearEvals(): void {
 
 export function evalsToCSV(evals: EvalEntry[]): string {
   const headers = [
-    'id', 'sessionId', 'turnIndex', 'userMessage', 'agentResponse',
-    'rating', 'thumbs', 'tags', 'comment', 'agentName', 'model', 'createdAt',
+    'id', 'sessionId', 'runId', 'runName', 'evalSetName', 'turnIndex', 'userMessage',
+    'expectedAnswer', 'agentResponse', 'rating', 'thumbs', 'tags', 'comment',
+    'agentName', 'model', 'createdAt',
   ]
   const escape = (val: unknown) =>
     `"${String(val ?? '').replace(/"/g, '""')}"`
@@ -44,8 +55,12 @@ export function evalsToCSV(evals: EvalEntry[]): string {
     [
       escape(e.id),
       escape(e.sessionId),
+      escape(e.runId),
+      escape(e.runName),
+      escape(e.evalSetName),
       escape(e.turnIndex),
       escape(e.userMessage),
+      escape(e.expectedAnswer),
       escape(e.agentResponse),
       escape(e.rating),
       escape(e.thumbs),

@@ -33,10 +33,10 @@ When the evals are mature enough, switch to **Batch mode**: fire your full test 
 - **Free-text notes** — "what should it have said?"
 
 ### Test Bank (`/test-suite`)
-- Manage a reusable list of test questions
-- Add notes on what a good answer looks like — these guide the AI auto-grader
-- 8 categories: General, Follow-up, Cold outreach, Declining, Complaints, Onboarding, Sales, Internal
-- Pre-loaded with 8 demo questions for an email writing agent
+- Upload eval sets as **CSV, Excel (xlsx/xls), Word (docx), PowerPoint (pptx), or PDF**
+- Columns are detected automatically (Question, Expected answer, Notes, Category)
+- Pick an agent and run every row; review and comment on each result
+- Run metadata (agent, model, Console deployment, eval set, timestamp) is stored for hill-climbing on the dashboard
 
 ### Batch runs
 - Run all test questions against the agent automatically

@@ -19,6 +19,38 @@ export interface TestQuestion {
   createdAt: string
 }
 
+export type EvalFileKind = 'csv' | 'xlsx' | 'xls' | 'docx' | 'pptx' | 'pdf' | 'manual'
+
+export interface ColumnMap {
+  question: string
+  expected: string | null
+  notes: string | null
+  category: string | null
+  id: string | null
+}
+
+export interface EvalSetRow {
+  id: string
+  question: string
+  expected: string
+  notes: string
+  category: string
+  raw: Record<string, string>
+}
+
+export interface EvalSet {
+  id: string
+  name: string
+  description: string
+  sourceFile: string
+  sourceType: EvalFileKind
+  columns: string[]
+  columnMap: ColumnMap
+  rows: EvalSetRow[]
+  createdAt: string
+  updatedAt: string
+}
+
 export interface Run {
   id: string
   name: string
@@ -28,6 +60,13 @@ export interface Run {
   agentName: string
   createdAt: string
   mode: 'manual' | 'batch'
+  evalSetId?: string
+  evalSetName?: string
+  agentSource?: 'messages' | 'claude-console'
+  deploymentId?: string
+  deploymentName?: string
+  rowCount?: number
+  sourceFile?: string
 }
 
 export interface EvalEntry {
@@ -38,6 +77,7 @@ export interface EvalEntry {
   turnIndex: number
   userMessage: string
   agentResponse: string
+  expectedAnswer?: string
   rating: 1 | 2 | 3 | 4 | 5 | null
   thumbs: 'up' | 'down' | null
   tags: string[]
@@ -47,6 +87,8 @@ export interface EvalEntry {
   model: string
   createdAt: string
   questionId?: string
+  evalSetId?: string
+  evalSetName?: string
   autoGrade?: AutoGrade
 }
 
