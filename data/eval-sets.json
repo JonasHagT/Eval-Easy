@@ -5,7 +5,12 @@
     "description": "10 questions that check the Nordic Knots weekly country P&L against AdHelp.io source data. Questions 1–5 are single figures; 6–10 are YoY / multi-step.",
     "sourceFile": "NORDIC_KNOTS_EVAL_SET.pdf",
     "sourceType": "pdf",
-    "columns": ["#", "Question", "Answer", "Category"],
+    "columns": [
+      "#",
+      "Question",
+      "Answer",
+      "Category"
+    ],
     "columnMap": {
       "question": "Question",
       "expected": "Answer",
@@ -147,5 +152,81 @@
     ],
     "createdAt": "2026-08-26T14:00:00.000Z",
     "updatedAt": "2026-08-26T14:00:00.000Z"
+  },
+  {
+    "id": "3df272bc-f1ee-4591-9eb2-61bf0e3dffc7",
+    "name": "nordic knots eval",
+    "description": "",
+    "sourceFile": "nordic_knots_eval.csv",
+    "sourceType": "csv",
+    "columns": [
+      "#",
+      "Question",
+      "Answer",
+      "Category"
+    ],
+    "columnMap": {
+      "question": "Question",
+      "expected": "Answer",
+      "notes": null,
+      "category": "Category",
+      "id": "#"
+    },
+    "rows": [
+      {
+        "id": "1",
+        "question": "What did Sweden's Google Ads spend in week 17 of 2026?",
+        "expected": "53015",
+        "notes": "",
+        "category": "Foundational",
+        "raw": {
+          "#": "1",
+          "Question": "What did Sweden's Google Ads spend in week 17 of 2026?",
+          "Answer": "53015",
+          "Category": "Foundational"
+        }
+      },
+      {
+        "id": "2",
+        "question": "What was total revenue across all markets in 2024 & 2025?",
+        "expected": "2024: 152201735; 2025: 260575778",
+        "notes": "",
+        "category": "Foundational",
+        "raw": {
+          "#": "2",
+          "Question": "What was total revenue across all markets in 2024 & 2025?",
+          "Answer": "2024: 152201735; 2025: 260575778",
+          "Category": "Foundational"
+        }
+      },
+      {
+        "id": "3",
+        "question": "What was the total ad spend across all markets in 2024 and 2025?",
+        "expected": "2024: 48280967; 2025: 89421364",
+        "notes": "",
+        "category": "Foundational",
+        "raw": {
+          "#": "3",
+          "Question": "What was the total ad spend across all markets in 2024 and 2025?",
+          "Answer": "2024: 48280967; 2025: 89421364",
+          "Category": "Foundational"
+        }
+      },
+      {
+        "id": "4",
+        "question": "What was Germany's revenue & cost in 2025?",
+        "expected": "Revenue 15273237; Ad spend 2257213",
+        "notes": "",
+        "category": "Foundational",
+        "raw": {
+          "#": "4",
+          "Question": "What was Germany's revenue & cost in 2025?",
+          "Answer": "Revenue 15273237; Ad spend 2257213",
+          "Category": "Foundational"
+        }
+      }
+    ],
+    "createdAt": "2026-08-26T15:00:18.120Z",
+    "updatedAt": "2026-08-26T15:00:18.120Z"
   }
 ]
