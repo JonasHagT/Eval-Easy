@@ -12,7 +12,8 @@
 .env.test.local
 .env.production.local
 
-# misc
+# typescript
+*.tsbuildinfo
 .DS_Store
 *.pem
 npm-debug.log*
