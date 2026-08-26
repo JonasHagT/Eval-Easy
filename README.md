@@ -69,15 +69,16 @@ cd Eval-Easy
 npm install
 ```
 
-### 2. Add your Anthropic API key
+### 2. Add your Anthropic API key and Console agent
 
 ```bash
 cp .env.example .env.local
 # Edit .env.local:
 # ANTHROPIC_API_KEY=sk-ant-...
+# ANTHROPIC_DEPLOYMENT_ID=depl_...
 ```
 
-Get a key at [console.anthropic.com](https://console.anthropic.com).
+Get a key at [console.anthropic.com](https://console.anthropic.com). When `ANTHROPIC_DEPLOYMENT_ID` is set, Eval Easy chats with that Claude Console managed agent (sessions + events API) instead of the Messages API.
 
 ### 3. Start the app
 
@@ -231,6 +232,12 @@ For production deployments (Vercel, Fly.io, etc.) the filesystem is ephemeral. S
 | Variable | Required | Description |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | Yes | Your Anthropic API key — only used server-side |
+| `ANTHROPIC_DEPLOYMENT_ID` | Yes for Console agent | Claude Console managed-agent deployment ID. When set, chat and batch runs call this agent instead of the Messages API |
+| `ANTHROPIC_AGENT_ID` | Optional | Fallback agent ID if the deployment cannot be fetched |
+| `ANTHROPIC_ENVIRONMENT_ID` | Optional | Fallback environment ID |
+| `ANTHROPIC_VAULT_IDS` | Optional | Comma-separated vault IDs for Console agent credentials |
+
+Copy `.env.example` to `.env.local`. `.env.local` is gitignored and must never be committed.
 
 ---
 

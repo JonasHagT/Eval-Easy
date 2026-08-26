@@ -159,6 +159,7 @@ export default function DashboardPage() {
             {[
               { model: 'claude-sonnet-4-6', label: 'Sonnet', color: '#6366f1' },
               { model: 'claude-opus-4-8', label: 'Opus', color: '#a855f7' },
+              { model: 'claude-opus-5', label: 'Opus 5', color: '#c084fc' },
               { model: 'claude-haiku-4-5-20251001', label: 'Haiku', color: '#22d3ee' },
             ].map(m => (
               <div key={m.model} className="flex items-center gap-1.5">

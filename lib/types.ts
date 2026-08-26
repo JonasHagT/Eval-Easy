@@ -55,4 +55,6 @@ export interface AgentConfig {
   systemPrompt: string
   model: string
   annotationGuide: string
+  source?: 'messages' | 'claude-console'
+  deploymentName?: string
 }

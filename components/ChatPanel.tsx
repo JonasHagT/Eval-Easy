@@ -9,9 +9,10 @@ interface Props {
   isLoading: boolean
   onSend: (content: string) => void
   hasPendingEval: boolean
+  longRunning?: boolean
 }
 
-export default function ChatPanel({ messages, isLoading, onSend, hasPendingEval }: Props) {
+export default function ChatPanel({ messages, isLoading, onSend, hasPendingEval, longRunning }: Props) {
   const [input, setInput] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -85,6 +86,11 @@ export default function ChatPanel({ messages, isLoading, onSend, hasPendingEval 
                   style={{ animationDelay: '320ms' }}
                 />
               </div>
+              {longRunning && (
+                <p className="text-[11px] text-gray-500 mt-2">
+                  Console agent is working — this can take a few minutes.
+                </p>
+              )}
             </div>
           </div>
         )}

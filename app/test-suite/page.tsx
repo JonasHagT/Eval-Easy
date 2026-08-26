@@ -18,14 +18,17 @@ const CATEGORIES = [
 const MODELS = [
   { id: 'claude-sonnet-4-6', label: 'Sonnet 4.6', desc: 'Recommended — balanced speed & quality' },
   { id: 'claude-opus-4-8', label: 'Opus 4.8', desc: 'Most capable — best for complex tasks' },
+  { id: 'claude-opus-5', label: 'Opus 5', desc: 'Claude Console managed agent' },
   { id: 'claude-haiku-4-5-20251001', label: 'Haiku 4.5', desc: 'Fastest — great for quick tests' },
 ]
 
 const DEFAULT_CONFIG: AgentConfig = {
-  name: 'Email Assistant',
-  systemPrompt: 'You are a professional email writing assistant. Help users craft clear, effective, and persuasive emails for any situation.',
-  model: 'claude-sonnet-4-6',
+  name: 'Nordic Knots Marketing Finance Controller',
+  systemPrompt: 'You are a finance controller specialized in digital marketing for www.nordicknots.com.',
+  model: 'claude-opus-5',
   annotationGuide: '',
+  source: 'claude-console',
+  deploymentName: 'Nordic Knots',
 }
 
 interface BatchResult {
@@ -63,13 +66,38 @@ export default function TestSuitePage() {
 
   useEffect(() => {
     const stored = localStorage.getItem('evalEasy_agentConfig')
+    let parsed: Partial<AgentConfig> = {}
     if (stored) {
       try {
-        const parsed = JSON.parse(stored)
-        setAgentConfig({ ...DEFAULT_CONFIG, ...parsed })
-        setBatchModel(parsed.model ?? DEFAULT_CONFIG.model)
+        parsed = JSON.parse(stored)
       } catch { /* ignore */ }
     }
+
+    fetch('/api/agent-config')
+      .then(r => r.json())
+      .then(remote => {
+        if (remote?.source === 'claude-console') {
+          const next: AgentConfig = {
+            name: remote.name ?? DEFAULT_CONFIG.name,
+            systemPrompt: remote.systemPrompt ?? DEFAULT_CONFIG.systemPrompt,
+            model: remote.model ?? DEFAULT_CONFIG.model,
+            annotationGuide: parsed.annotationGuide || DEFAULT_CONFIG.annotationGuide,
+            source: 'claude-console',
+            deploymentName: remote.deploymentName,
+          }
+          setAgentConfig(next)
+          setBatchModel(next.model)
+          return
+        }
+        const merged = { ...DEFAULT_CONFIG, ...parsed, source: 'messages' as const }
+        setAgentConfig(merged)
+        setBatchModel(merged.model)
+      })
+      .catch(() => {
+        setAgentConfig({ ...DEFAULT_CONFIG, ...parsed })
+        setBatchModel(parsed.model ?? DEFAULT_CONFIG.model)
+      })
+
     fetch('/api/test-suite')
       .then(r => r.json())
       .then((data: TestQuestion[]) => {
@@ -284,6 +312,14 @@ export default function TestSuitePage() {
           </span>
           <span className="text-gray-700">·</span>
           <span className="text-xs text-gray-600">{agentConfig.model}</span>
+          {agentConfig.source === 'claude-console' && (
+            <>
+              <span className="text-gray-700">·</span>
+              <span className="text-xs text-indigo-300">
+                Console{agentConfig.deploymentName ? ` · ${agentConfig.deploymentName}` : ''}
+              </span>
+            </>
+          )}
           <a href="/" className="ml-auto text-xs text-indigo-400 hover:text-indigo-300 transition-colors">
             Change agent →
           </a>
@@ -464,6 +500,12 @@ export default function TestSuitePage() {
                   <label className="block text-[10px] font-semibold text-gray-500 uppercase tracking-widest mb-2">
                     Model to test
                   </label>
+                  {agentConfig.source === 'claude-console' ? (
+                    <p className="text-xs text-gray-400 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2.5">
+                      Batch runs use the Claude Console agent
+                      {agentConfig.deploymentName ? ` (${agentConfig.deploymentName})` : ''} with {agentConfig.model}.
+                    </p>
+                  ) : (
                   <div className="space-y-2">
                     {MODELS.map(m => (
                       <label
@@ -489,6 +531,7 @@ export default function TestSuitePage() {
                       </label>
                     ))}
                   </div>
+                  )}
                 </div>
 
                 <div className="flex gap-3 pt-1">
