@@ -59,34 +59,59 @@ When the evals are mature enough, switch to **Batch mode**: fire your full test 
 
 ---
 
-## Quick start
+## Run on your computer (recommended)
 
-### 1. Clone and install
+The Cloud Agent desktop is remote, so the UI feels slow. Run Eval Easy on your laptop instead — it is a normal Next.js app and needs no database.
+
+### 1. Install Node.js 20 or newer
+
+Download it from [nodejs.org](https://nodejs.org) (LTS). Confirm:
+
+```bash
+node -v   # v20 or v22
+```
+
+If you use nvm: `nvm install` (this repo has a `.nvmrc`).
+
+### 2. Clone and set up
 
 ```bash
 git clone https://github.com/JonasHagT/Eval-Easy.git
 cd Eval-Easy
+npm run setup
+```
+
+`npm run setup` creates `.env.local` from `.env.example` if you do not already have one.
+
+### 3. Add your Anthropic key
+
+Edit `.env.local`:
+
+```
+ANTHROPIC_API_KEY=sk-ant-...
+ANTHROPIC_DEPLOYMENT_ID=depl_...
+```
+
+Get a key at [console.anthropic.com](https://console.anthropic.com). Use the same Claude Console **managed agent deployment** you already created (Nordic Knots). When `ANTHROPIC_DEPLOYMENT_ID` is set, Eval Easy chats with that agent instead of the Messages API.
+
+`.env.local` is gitignored. Never commit it.
+
+### 4. Install and start
+
+```bash
 npm install
-```
-
-### 2. Add your Anthropic API key and Console agent
-
-```bash
-cp .env.example .env.local
-# Edit .env.local:
-# ANTHROPIC_API_KEY=sk-ant-...
-# ANTHROPIC_DEPLOYMENT_ID=depl_...
-```
-
-Get a key at [console.anthropic.com](https://console.anthropic.com). When `ANTHROPIC_DEPLOYMENT_ID` is set, Eval Easy chats with that Claude Console managed agent (sessions + events API) instead of the Messages API.
-
-### 3. Start the app
-
-```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) in Chrome on this same computer. The first compile takes a few seconds; after that it should feel instant.
+
+If you already cloned the repo, `git pull` then `npm install` and `npm run dev` is enough.
+
+### If Chrome still says localhost refused to connect
+
+- Confirm the terminal shows `Ready` and is still running (`npm run dev`).
+- Try [http://127.0.0.1:3000](http://127.0.0.1:3000).
+- Make sure nothing else is using port 3000, or start with `npx next dev -p 3001`.
 
 ---
 
@@ -237,7 +262,7 @@ For production deployments (Vercel, Fly.io, etc.) the filesystem is ephemeral. S
 | `ANTHROPIC_ENVIRONMENT_ID` | Optional | Fallback environment ID |
 | `ANTHROPIC_VAULT_IDS` | Optional | Comma-separated vault IDs for Console agent credentials |
 
-Copy `.env.example` to `.env.local`. `.env.local` is gitignored and must never be committed.
+Copy `.env.example` to `.env.local` (`npm run setup` does this). `.env.local` is gitignored and must never be committed.
 
 ---
 
